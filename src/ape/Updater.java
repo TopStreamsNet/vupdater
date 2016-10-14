@@ -94,7 +94,9 @@ public class Updater {
 	ProcessBuilder pb = new ProcessBuilder(args);
 	pb.directory(new File("").getAbsoluteFile());
 	try {
-	    pb.start();
+	    pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+	    pb.redirectError(ProcessBuilder.Redirect.INHERIT);
+	    pb.start().waitFor();
 	} catch(Exception e) {
 	    Logging.error(e, false);
 	}
