@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+
+<project name="hafen" default="jar">
+  <target name="build-env">
+    <mkdir dir="build" />
+    <mkdir dir="build/classes" />
+  </target>
+  
+
+  <target name="hafen-client" depends="build-env">
+    <javac srcdir="src" destdir="build/classes" debug="on"
+	   source="1.8" target="1.8" includeantruntime="no">
+      <classpath>
+	<pathelement path="lib/commons-io-2.5.jar" />
+	<pathelement path="lib/commons-codec-1.10.jar" />
+      </classpath>
+    </javac>
+    <copy todir="build/classes">
+      <fileset dir="src" excludes="**/*.java" />
+    </copy>
+  </target>
+
+  <target name="jar" depends="clean,hafen-client">
+    <jar destfile="build/hafen-updater.jar" update="true">
+      <fileset dir="build/classes" />
+      <manifest>
+	<attribute name="Main-Class" value="ape.Updater" />
+	<attribute name="Class-Path" value="commons-io-2.5.jar commons-codec-1.10.jar"/>
+      </manifest>
+    </jar>
+  </target>
+  
+  <target name="clean">
+    <delete dir="build" />
+  </target>
+</project>
