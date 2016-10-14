@@ -76,7 +76,9 @@ public class Updater {
 	    for(String dl : dls) {
 		String fn = dl.substring(baseurl.length());
 		Logging.log("Downloading " + dl + " -> " + fn);
-		FileUtils.copyURLToFile(new URL(dl), new File(fn));
+		try {
+		    FileUtils.copyURLToFile(new URL(dl.replaceAll("\\\\", "/")), new File(fn));
+		} catch(Exception e) { Logging.error(e, false); }
 	    }
 	}
 	

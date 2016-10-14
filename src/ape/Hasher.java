@@ -52,7 +52,7 @@ public class Hasher {
 	    while(itr.hasNext()) {
 		f = itr.next();
 		String fn = f.getAbsolutePath().substring(dir.getAbsolutePath().length()+1);
-		sb.append(fn);
+		sb.append(fn.replaceAll("\\\\", "/"));
 		sb.append('=');
 		sb.append(getHash(f));
 		sb.append('\n');
