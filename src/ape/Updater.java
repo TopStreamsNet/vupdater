@@ -35,7 +35,10 @@ public class Updater {
 
     public String getHash(String f) throws Exception {
 	Logging.log("Generating hash for " + f);
-	return DigestUtils.sha256Hex(FileUtils.readFileToByteArray(new File(f)));
+	if(new File(f).exists()) 
+	    return DigestUtils.sha256Hex(FileUtils.readFileToByteArray(new File(f)));
+	else
+	    return "";
     }
 
     public String[] checkVer() throws Exception {
@@ -62,20 +65,23 @@ public class Updater {
 
     public void update() throws Exception {
 	md = MessageDigest.getInstance("SHA-256");
-	URL upd_url = new URL(baseurl+"update/ver");
+	URL upd_url = new URL(baseurl+"ver");
 	//download update file
 	Logging.log("Downloading new version file");
 	FileUtils.copyURLToFile(upd_url, new File("tmp/ver"));
 	String[] dls = checkVer();
 
 	//download files missing/mismatch on hashes
-	for(String dl : dls) {
-	    String fn = dl.substring(baseurl.length()+1);
-	    Logging.log("Downloading " + dl + " -> " + fn);
-	    FileUtils.copyURLToFile(new URL(dl), new File(fn));
+	if(dls != null) {
+	    for(String dl : dls) {
+		String fn = dl.substring(baseurl.length());
+		Logging.log("Downloading " + dl + " -> " + fn);
+		FileUtils.copyURLToFile(new URL(dl), new File(fn));
+	    }
 	}
-
+	
 	Logging.log("Moving over new version file");
+	FileUtils.forceDelete(new File("ver"));
 	FileUtils.moveFile(new File("tmp/ver"), new File("ver"));
     }
 

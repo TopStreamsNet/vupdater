@@ -10,6 +10,7 @@ public class FileIO {
 	BufferedReader br = new BufferedReader(new FileReader(f));
 	while((ln = br.readLine()) != null)
 	    str.add(ln);
+	br.close();
 	return str.toArray(new String[0]);
     }
 }
