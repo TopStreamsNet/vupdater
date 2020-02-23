@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ArrayList;
 
 import java.security.*;
+import org.apache.commons.io.FilenameUtils;
 
 public class Updater {
     public static void main(String args[]) {
@@ -56,8 +57,15 @@ public class Updater {
 	for(int i = 1;i < files.length;++i) {
 	    kv = files[i].split("=");
 	    Logging.log("Comparing file " + kv[0]);
-	    if(!kv[1].equals(getHash(kv[0])))
-		download.add(baseurl+kv[0]);
+	    if(!kv[1].equals(getHash(kv[0]))){
+                if (kv[0].equals("salem-res.jar")){
+                    download.add("http://game.salemthegame.com/java/salem-res.jar");
+                } else if (kv[0].equals("builtin-res.jar")){
+                    download.add("http://game.salemthegame.com/java/builtin-res.jar");
+                } else {
+                    download.add(baseurl+kv[0]);
+                }
+            }
 	}
 
 	return download.toArray(new String[0]);
@@ -74,7 +82,7 @@ public class Updater {
 	//download files missing/mismatch on hashes
 	if(dls != null) {
 	    for(String dl : dls) {
-		String fn = dl.substring(baseurl.length());
+                String fn = FilenameUtils.getName(dl);
 		Logging.log("Downloading " + dl + " -> " + fn);
 		try {
 		    FileUtils.copyURLToFile(new URL(dl.replaceAll("\\\\", "/")), new File(fn));
@@ -91,6 +99,12 @@ public class Updater {
 	Logging.log("Starting client");
 	ArrayList<String> args = new ArrayList<String>();
 	args.add("java");
+        args.add("-jar");
+        args.add("vsalem.jar");
+        args.add("-U");
+        args.add("http://game.salemthegame.com/res/");
+        args.add("game.salemthegame.com");
+         
 	for(int i = 2;i < cargs.length;++i)
 	    args.add(cargs[i]);
 	ProcessBuilder pb = new ProcessBuilder(args);

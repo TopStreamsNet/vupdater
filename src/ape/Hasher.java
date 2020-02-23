@@ -12,7 +12,7 @@ public class Hasher {
     private class Filter implements org.apache.commons.io.filefilter.IOFileFilter {
 	public boolean accept(File f) {
 	    if(!f.getName().equals("ver") &&
-	       !f.getName().equals("hafen-updater.jar"))
+	       !f.getName().equals("vupdater.jar"))
 		return true;
 	    else
 		return false;
